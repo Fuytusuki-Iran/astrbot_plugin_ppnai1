@@ -400,6 +400,15 @@ class DefaultsConfig(BaseModel):
             json_schema_extra={"hint": "值需在 0 到 1 之间"},
         ),
     ] = 0.5
+    default_preset: Annotated[
+        str,
+        Field(
+            description="默认预设名称",
+            json_schema_extra={
+                "hint": "填写你已添加的预设标题（如：猫娘）。留空则不使用。手动 nai / nai画图 / 自动画图 未指定 s1= 时自动应用"
+            },
+        ),
+    ] = ""
 
 class Config(BaseModel):
     general: Annotated[
