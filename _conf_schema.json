@@ -478,6 +478,13 @@
         "minimum": 0.0,
         "title": "Character Keep Strength",
         "type": "float"
+      },
+      "default_preset": {
+        "default": "",
+        "description": "默认预设名称",
+        "hint": "填写你已添加的预设标题（如：猫娘）。留空则不使用。手动 nai 和 自动画图 未指定 s1= 时自动应用此预设",
+        "title": "默认预设名称",
+        "type": "string"
       }
     }
   }
