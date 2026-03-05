@@ -174,6 +174,11 @@ async def handle_llm_response_auto_draw(plugin, event, resp: LLMResponse):
             return
 
     preset_contents: list[str] = []
+    if not presets:
+        default_preset = plugin.config.defaults.default_preset.strip()
+        if default_preset:
+            presets = [default_preset]
+            logger.info(f"[默认预设] 自动画图已应用: {default_preset}")
     for preset_name in presets:
         preset = await asyncio.to_thread(plugin.preset_manager.get_preset, preset_name)
         if preset:
