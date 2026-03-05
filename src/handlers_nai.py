@@ -39,6 +39,11 @@ async def handle_nai_draw(plugin, event, waiting_replies: list[str]) -> AsyncIte
 
     raw_input = event.message_str.removeprefix("nai画图").strip()
     preset_names, other_params = plugin._parse_presets_from_params(raw_input)
+    if not preset_names:
+        default_preset = plugin.config.defaults.default_preset.strip()
+        if default_preset:
+            preset_names = [default_preset]
+            logger.info(f"[默认预设] 已自动应用: {default_preset}")
 
     description = other_params.get("ds", "")
 
@@ -205,7 +210,15 @@ async def handle_cmd_nai(plugin, event, waiting_replies: list[str]) -> AsyncIter
 
     is_whitelisted = plugin.user_manager.is_whitelisted(user_id)
     quota_enabled = plugin.config.quota.enable_quota
-
+    
+    # /nai 短命令也支持默认预设
+    raw_input = event.message_str.removeprefix("/nai").removeprefix("nai").strip()
+    preset_names, _ = plugin._parse_presets_from_params(raw_input)
+    if not preset_names:
+        default_preset = plugin.config.defaults.default_preset.strip()
+        if default_preset:
+            preset_names = [default_preset]
+            logger.info(f"[默认预设] 已自动应用: {default_preset}")
     try:
         req = await plugin._parse_args(event, is_whitelisted)
     except Exception as e:  # noqa: BLE001
