@@ -33,6 +33,12 @@ async def handle_auto_draw_on(plugin, event) -> AsyncIterator:
 
     raw_input = event.message_str.removeprefix("nai自动画图开").strip()
     preset_names, _ = plugin._parse_presets_from_params(raw_input)
+    if not preset_names:
+        default_preset = plugin.config.defaults.default_preset.strip()
+        if default_preset:
+            preset_names = [default_preset]
+            logger.info(f"[默认预设] 已自动应用: {default_preset}")
+    
 
     for preset_name in preset_names:
         preset = await asyncio.to_thread(plugin.preset_manager.get_preset, preset_name)
